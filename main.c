@@ -198,7 +198,7 @@ int main(void)
 	gamestate_t game;
 	game.is_running = true;
 	game.redraw_required = true;
-    game.flags = 0;
+	game.flags = 0;
 	game.mines = 10;
 	game.win = false;
 	game.lose = false;
