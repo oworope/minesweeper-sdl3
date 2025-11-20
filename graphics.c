@@ -18,10 +18,10 @@ void init_graphics(gamestate_t* game)
 
 	SDL_Surface* texture = SDL_LoadBMP(TEXTURE_FILE);
 	if (!texture) SDL_Log("%s", SDL_GetError());
-	SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_PIXELART);
 	game->atlas = SDL_CreateTextureFromSurface(game->renderer, texture);
 	if (!game->atlas) SDL_Log("%s", SDL_GetError());
 	SDL_DestroySurface(texture);
+	SDL_SetTextureScaleMode(game->atlas, SDL_SCALEMODE_PIXELART);
 }
 
 void destroy_graphics(gamestate_t* game)
@@ -50,13 +50,13 @@ void draw_field(gamestate_t* game)
 			int tx = 0; // What texture from atlas to use
 			int ty = 0;
 
-			if (game->field[x][y].open || game->debug)
+			if (game->field[x][y].open || game->field[x][y].flag || game->debug)
 			{
 				if (!game->lose && game->field[x][y].flag && !game->field[x][y].open)
 				{
 					tx = 2; ty = 2;
 				}
-				if ((game->field[x][y].open || game->debug) && game->field[x][y].num != 0)
+				else if ((game->field[x][y].open || game->debug) && game->field[x][y].num != 0)
 				{
 					// Draw a number
 					switch (game->field[x][y].num)
@@ -133,7 +133,7 @@ void handle_events(gamestate_t* game)
 		{
 			game->is_running = false;
 		}
-		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN)
+		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && !(game->lose || game->win))
 		{
 			int x = e.button.x / CELL_SIZE;
 			int y = e.button.y / CELL_SIZE;
@@ -166,4 +166,5 @@ void handle_events(gamestate_t* game)
 			game->redraw_required = true;
 		}
 	}
+	SDL_Delay(16);
 }

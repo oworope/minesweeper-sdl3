@@ -30,9 +30,9 @@ void generate_field(gamestate_t* game)
 		else game->field[x][y].mine = true;
 	}
 
-	for (int x = 1; x < game->w - 1; x++)
+	for (int x = 0; x < game->w; x++)
 	{
-		for (int y = 1; y < game->h - 1; y++)
+		for (int y = 0; y < game->h; y++)
 		{
 			//
 			if (game->field[x][y].mine) continue;
@@ -40,6 +40,8 @@ void generate_field(gamestate_t* game)
 			{
 				for (int j = -1; j < 2; j++)
 				{
+					if (x + i < 0 || y + j < 0 || x + i >= game->w || y + j >= game->h)
+						continue;
 					if (game->field[x + i][y + j].mine)
 						game->field[x][y].num += 1;
 				}
@@ -69,7 +71,7 @@ void check_field(gamestate_t* game, int x, int y)
 	{
 		for (int j = -1; j < 2; j++)
 		{
-			if (x + i < 0 || y + i < 0 || x + i > game->w || y + i > game->h)
+			if (x + i < 0 || y + j < 0 || x + i > game->w || y + j > game->h)
 				continue;
 			if (
 				!game->field[x + i][y + j].mine
