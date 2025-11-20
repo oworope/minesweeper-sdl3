@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 4.1.1)
 project(minesweeper C)
-find_package(SDL3 REQUIRED)
-add_executable(${PROJECT_NAME} main.c)
+add_subdirectory(SDL EXCLUDE_FROM_ALL)
+add_executable(${PROJECT_NAME} main.c game.c graphics.c)
 target_link_libraries(${PROJECT_NAME} PRIVATE SDL3::SDL3)
