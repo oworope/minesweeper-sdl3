@@ -1,4 +1,5 @@
 #include <time.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include "game.h"
 #include "graphics.h"
