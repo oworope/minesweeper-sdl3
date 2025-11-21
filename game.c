@@ -59,19 +59,35 @@ void destroy_field(gamestate_t* game)
 	free(game->field);
 }
 
+void check_for_win(gamestate_t* game)
+{
+	int counter = 0;
+	for (int x = 0; x < game->w; x++)
+	{
+		for (int y = 0; y < game->h; y++)
+		{
+			if (game->field[x][y].open) counter += 1;
+		}
+	}
+	if (game->flags == game->mines && counter == game->w * game->h - game->mines)
+		game->win = true;
+}
+
 void check_field(gamestate_t* game, int x, int y)
 {
 	if (game->field[x][y].mine) { game->lose = true; return; }
 	game->field[x][y].open = true;
 	game->field[x][y].flag = false;
 	game->redraw_required = true;
-	if (x == game->w - 1 || y == game->w - 1 || x == 0 || y == 0)
-	return;
+	//if (x == game->w - 1 || y == game->w - 1 || x == 0 || y == 0)
+	//	return;
 	for (int i = -1; i < 2; i++)
 	{
+		if ((x == game->w - 1 && i == 1) || (x == 0 && i == -1))
+			continue;
 		for (int j = -1; j < 2; j++)
 		{
-			if (x + i < 0 || y + j < 0 || x + i > game->w || y + j > game->h)
+			if ((y == game->h - 1 && j == 1) || (y == 0 && j == -1))
 				continue;
 			if (
 				!game->field[x + i][y + j].mine
@@ -81,4 +97,5 @@ void check_field(gamestate_t* game, int x, int y)
 			check_field(game, x + i, y + j);
 		}
 	}
+	check_for_win(game);
 }

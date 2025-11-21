@@ -54,7 +54,14 @@ void draw_field(gamestate_t* game)
 			{
 				if (!game->lose && game->field[x][y].flag && !game->field[x][y].open)
 				{
-					tx = 2; ty = 2;
+					if (!game->win)
+					{
+						tx = 2; ty = 2;
+					}
+					else
+					{
+						tx = 3; ty = 2;
+					}
 				}
 				else if ((game->field[x][y].open || game->debug) && game->field[x][y].num != 0)
 				{
@@ -135,6 +142,7 @@ void handle_events(gamestate_t* game)
 		}
 		if (e.type == SDL_EVENT_MOUSE_BUTTON_DOWN && !(game->lose || game->win))
 		{
+			game->clicks += 1;
 			int x = e.button.x / CELL_SIZE;
 			int y = e.button.y / CELL_SIZE;
 			int cell_x = x * CELL_SIZE;
@@ -158,6 +166,7 @@ void handle_events(gamestate_t* game)
 					game->flags -= 1;
 					game->redraw_required = true;
 				}
+				check_for_win(game);
 			}
 		}
 		if (e.type == SDL_EVENT_KEY_DOWN && e.key.key == SDLK_D)

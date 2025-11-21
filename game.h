@@ -21,6 +21,7 @@ typedef struct gamestate_s
 	int w, h;
 	int flags;
 	int mines;
+	int clicks;
 	bool redraw_required;
 
 	// Graphics
@@ -32,4 +33,5 @@ gamestate_t;
 
 void generate_field(gamestate_t* game);
 void destroy_field(gamestate_t* game);
+void check_for_win(gamestate_t* game);
 void check_field(gamestate_t* game, int x, int y);
